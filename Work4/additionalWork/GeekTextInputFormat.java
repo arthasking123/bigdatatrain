@@ -24,32 +24,10 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.*;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-/**
- * FileInputFormat for base64 encoded text files.
- * 
- * Each line is a base64-encoded record. The key is a LongWritable which is the
- * offset. The value is a BytesWritable containing the base64-decoded bytes.
- * 
- * This class accepts a configurable parameter:
- * "base64.text.input.format.signature"
- * 
- * The UTF-8 encoded signature will be compared with the beginning of each
- * decoded bytes. If they don't match, the record is discarded. If they match,
- * the signature is stripped off the data.
- */
 public class GeekTextInputFormat implements
     InputFormat<LongWritable, BytesWritable>, JobConfigurable {
 
-  /**
-   * Base64LineRecordReader.
-   *
-   */
   public static class GeekLineRecordReader implements
       RecordReader<LongWritable, BytesWritable>, JobConfigurable {
 
@@ -89,14 +67,13 @@ public class GeekTextInputFormat implements
     @Override
     public boolean next(LongWritable key, BytesWritable value) throws IOException {
       while (reader.next(key, text)) {
-        String replacedString = text.toString().replaceAll(" ge{2,}k", "");
+        String replacedString = text.toString().replaceAll(" ge{2,256}k", "");
         value.set(replacedString.getBytes(), 0, replacedString.length());
         return true;
       }
       // no more data
       return false;
     }
-
 
     @Override
     public void configure(JobConf job) {

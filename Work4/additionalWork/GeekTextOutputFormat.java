@@ -30,28 +30,11 @@ import org.apache.hadoop.mapred.JobConfigurable;
 import org.apache.hadoop.util.Progressable;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-/**
- * FileOutputFormat for base64 encoded text files.
- *
- * Each line is a base64-encoded record. The key is a LongWritable which is the
- * offset. The value is a BytesWritable containing the base64-decoded bytes.
- *
- * This class accepts a configurable parameter:
- * "base64.text.output.format.signature"
- *
- * The UTF-8 encoded signature will be prepended to each BytesWritable before we
- * do base64 encoding.
- */
 public class GeekTextOutputFormat<K extends WritableComparable, V extends Writable>
     extends HiveIgnoreKeyTextOutputFormat<K, V> {
 
-  /**
-   * Base64RecordWriter.
-   *
-   */
   public static class GeekRecordWriter implements RecordWriter,
       JobConfigurable {
 
