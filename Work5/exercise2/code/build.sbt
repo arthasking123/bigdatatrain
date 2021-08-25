@@ -1,8 +1,8 @@
-import sbt.Keys.fork
+scalaVersion := "2.11.12"
 
 lazy val scala212 = "2.12.8"
 lazy val scala211 = "2.11.12"
-lazy val supportedScalaVersions = List(scala212, scala211)
+lazy val supportedScalaVersions = List(scala212,scala211)
 
 
 val sparkVersion = "2.4.3"
@@ -27,5 +27,6 @@ lazy val sparkdistcp = (project in file("."))
     scalacOptions ++= compilerOptions,
     crossScalaVersions := supportedScalaVersions,
     libraryDependencies += "org.apache.spark" %% "spark-core" % sparkVersion % Provided,
-    libraryDependencies += "com.github.scopt" %% "scopt" % scoptVersion % Compile,
+    libraryDependencies += "org.apache.spark" %% "spark-sql" % sparkVersion % Provided,
+    libraryDependencies += "com.github.scopt" %% "scopt" % scoptVersion,
   )

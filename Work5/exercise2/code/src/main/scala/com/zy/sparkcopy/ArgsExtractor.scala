@@ -1,14 +1,14 @@
 package com.zy.sparkcopy
 
-import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.Path
+import scopt.OptionParser
 
 import java.net.URI
 
 object ArgsExtractor {
   def parse(args: Array[String]): Config = {
 
-    val parser = new scopt.OptionParser[Config]("") {
+    val parser = new OptionParser[Config]("sparkDistCP") {
       head("sparkDistCP", "1.0")
 
       opt[Unit]("i")

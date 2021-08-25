@@ -32,7 +32,7 @@ object FileListUtils extends Logging{
                  case Some(p) =>
                    threadsWorking.put(uuid, true)
                    try {
-                       val iterator = localFS.listLocatedStatus(sourcePath)
+                       val iterator = localFS.listLocatedStatus(p)
                        while(iterator.hasNext){
                          val fileStatus: LocatedFileStatus = iterator.next()
                          if(fileStatus.isDirectory){
@@ -60,8 +60,8 @@ object FileListUtils extends Logging{
       Await.result(Future.sequence(tasks), Duration.Inf)
       pool.shutdown()
 
-      if (!result.isEmpty)
-        throw new RuntimeException("Exception listing files")
+      if (!toProcessDirectoryList.isEmpty)
+        throw new RuntimeException("toProcessDirectoryList is not empty")
 
       result.iterator().asScala.toSeq
     }
