@@ -1,25 +1,24 @@
 package com.zy.sparkcopy.utils
 
-import org.apache.hadoop.fs.{FileStatus, Path}
+import org.apache.hadoop.fs.Path
 
 sealed trait FileType extends Serializable
 case object File extends FileType
 case object Directory extends FileType
 
-case class FilePathWithStatus(path: Path, fileType: FileType) extends Serializable {
-  def getPath: Path = path
+case class FilePathWithStatus(uri: String, fileType: FileType) extends Serializable {
+  def getPath: Path = new Path(uri)
 
   def isDirectory: Boolean = fileType == Directory
 
   def isFile: Boolean = fileType == File
 }
 
-object FilePathWithStatus {
+object FilePathWithStatus extends Serializable{
 
-  def apply(fileStatus: FileStatus): FilePathWithStatus = {
+  def apply(fileURI: String, isDirectory: Boolean, isFile: Boolean): FilePathWithStatus = {
 
-    val fileType = if (fileStatus.isDirectory) Directory else if (fileStatus.isFile) File else throw new RuntimeException(s"File [$fileStatus] is neither a directory or file")
-
-    new FilePathWithStatus(fileStatus.getPath, fileType)
+    val fileType = if (isDirectory) Directory else if (isFile) File else throw new RuntimeException(s"File [$fileURI] is neither a directory or file")
+    new FilePathWithStatus(fileURI, fileType)
   }
 }
